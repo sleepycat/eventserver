@@ -16,7 +16,7 @@ const { PORT = 3000, HOST = '0.0.0.0' } = process.env
   const publish = (event) => {
     const encoded = jc.encode(event)
     console.log({ publishing: event, encoded })
-    nc.publish('channels.count', encoded)
+    js.publish('channels.count', encoded)
   }
 
   const server = Server({ context: { publish } })

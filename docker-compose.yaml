@@ -1,7 +1,7 @@
 version: "3.7"
 services:
   jetstream:
-    image: synadia/jsm:latest
+    image: synadia/jsm:nightly
     command: ["server", "--debug"]
     expose:
       - "4222"
