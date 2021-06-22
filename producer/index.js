@@ -1,4 +1,4 @@
-import { connect, StringCodec, JSONCodec, Empty, AckPolicy } from 'nats'
+import { connect, AckPolicy } from 'nats'
 import { Server } from './src/Server.js'
 const { PORT = 3000, HOST = '0.0.0.0' } = process.env
 
@@ -11,12 +11,9 @@ const { PORT = 3000, HOST = '0.0.0.0' } = process.env
 
   // create a jetstream client:
   const js = nc.jetstream()
-  const jc = JSONCodec()
-  const sc = StringCodec()
-  const publish = (event) => {
-    const encoded = jc.encode(event)
-    console.log({ publishing: event, encoded })
-    js.publish('channels.count', encoded)
+
+  const publish = ({ channel, event }) => {
+    js.publish(channel, js.jc.encode(event))
   }
 
   const server = Server({ context: { publish } })

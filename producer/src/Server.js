@@ -8,7 +8,6 @@ import {
   GraphQLInt,
 } from 'graphql'
 
-
 let count = 0
 export function Server({ context }) {
   const query = new GraphQLObjectType({
@@ -18,9 +17,26 @@ export function Server({ context }) {
         type: GraphQLString,
         resolve: async (root, args, { publish }) => {
           // to publish messages to a stream:
-					count++
-          const pa = publish({ count })
+          count++
+          const pa = publish({ channel: 'channels.count', event: { count } })
           return count
+        },
+      },
+      domain: {
+        type: GraphQLString,
+        args: {
+          name: {
+            description: 'the domain',
+            type: new GraphQLNonNull(GraphQLString),
+          },
+        },
+        resolve: async (root, { name }, { publish }) => {
+          // to publish messages to a stream:
+          const pa = publish({
+            channel: 'channels.domains',
+            event: { domain: name },
+          })
+          return name
         },
       },
     }),
